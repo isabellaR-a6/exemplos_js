@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Intervalo entre Datas</title>
+    <!---Estilo da página-->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input {
+            padding: 5px;
+            margin: 5px;
+        }
+
+         /*Estilos dos botões*/
+
+
+        button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+        /*Estilo do botão de limpar (cinza*/
+        .btn-limpar {
+            background-color: #888;
+        }
+        /*Area do resultado*/
+        #resultado {
+            margin-top: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Calculadora de Intervalo entre Datas</h1>
+    <!---Entrada de dados para as datas-->
+    <label for="data1">Digite a primeira data:</label>
+    <input type="date" id="data1">
+
+    <label for="data2">Digite a segunda data:</label>
+    <input type="date" id="data2">
+
+    <!---Botão de ação-->
+    <br>
+    <button onclick="calcularIntervalo()">Calcular Intervalo</button>
+    <button class="btn-limpar" onclick="limparCampos()">Limpar Campos</button>
+    <!--Onde o resultado será exibido-->
+    <div id="resultado"></div>
+
+    <script>
+        function calcularIntervalo() {
+             //pega os valores inseridos pelo usuario 
+            const data1 = document.getElementById("data1").value;
+            const data2 = document.getElementById("data2").value;
+
+            if (!data1 || !data2) {
+                document.getElementById("resultado").innerHTML =
+                    "<strong style='color:red;'>⚠️ Por favor, preencha as duas datas antes de calcular!</strong>";
+                return;
+                //Interrompe a função se faltar alguma data
+
+            }
+            //Converte as springs recebidas pelo html em datas
+            const d1 = new Date(data1);
+            const d2 = new Date(data2);
+
+             //calcula a diferença entre as datas em milisegundos
+        //o ABS serve para maior precisão pois não arredonda é mais usado em possiveis número quebrados e sempre retorna um valor positivo
+        //quando subtrai as duas datas eles voltam em milisegundos
+
+            const diffEmMs = Math.abs(d2 - d1);
+        // Explicando os números 
+        // 1 dia = 24 horas
+        // 1 hora = 60 minutos
+        // 1 minuto = 60 segundos
+        // 1 segundo = 1000 milisegundos
+        // isso significa que 1 dia inteiro é 1000 * 60 * 60 *24 milisegundos
+
+            const diffEmDias = Math.floor(diffEmMs / (1000 * 60 * 60 * 24));
+
+             //converte esse dia em meses e anos 
+        //essa conta considera os 30 dias do mês e os 12 meses do ano 
+            const diffEmMeses = Math.floor(diffEmDias / 30);
+            const diffEmAnos = Math.floor(diffEmMeses / 12);
+
+            //exibe o resultado na tela
+            document.getElementById("resultado").innerHTML = `
+                <p><strong>Diferença em dias:</strong> ${diffEmDias} dias</p>
+                <p><strong>Diferença em meses (aprox.):</strong> ${diffEmMeses} meses</p>
+                <p><strong>Diferença em anos (aprox.):</strong> ${diffEmAnos} anos</p>
+            `;
+        }
+
+        //Limpar os campos para o usuario colocar de novo 
+        function limparCampos() {
+            document.getElementById("data1").value = ""; // deixei entre as aspas sem naad para ficar vazio
+            document.getElementById("data2").value = "";
+            //limpa o resultado
+            document.getElementById("resultado").innerHTML = "";
+             //volta para o primeiro campo
+            document.getElementById("data1").focus();
+        }
+    </script>
+
+</body>
+</html>
+
